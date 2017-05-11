@@ -1,0 +1,33 @@
+[
+{
+	"id" : "AutoJs",
+	"caption": "AutoJs",
+	"children":
+	[
+	{
+		"caption" : "Run",
+		"command" : "run"
+	},
+	{
+		"caption" : "Rerun",
+		"command" : "rerun"
+	},
+	{
+		"caption" : "Stop",
+		"command" : "stop"
+	},
+	{
+		"caption" : "StopAll",
+		"command" : "stop_all"
+	},
+	{
+		"caption" : "Start Server",
+		"command" : "connect"
+	},
+	{
+		"caption" : "Stop Server",
+		"command" : "disconnect"
+	}
+	]
+}
+]
