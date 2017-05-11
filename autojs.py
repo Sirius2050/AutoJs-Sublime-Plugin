@@ -38,14 +38,12 @@ class AutoJsServer:
         print("waiting for accepting")
         self.conn, addr = self.server.accept()
         print("accepted: {0}:{1}".format(addr[0], addr[1]))
-        sublime.status_message("{0}:{1} Connected".format(addr[0], addr[1]))
+        sublime.status_message("{0}:{1} connected".format(addr[0], addr[1]))
         try:
-            while True:
-                with closing(self.conn.makefile(encoding='utf-8')) as f:
-                    for line in f:
-                        print(line)
-                        json_obj = json.loads(line)
-                        self.on_receive(json_obj)
+            with closing(self.conn.makefile(encoding='utf-8')) as f:
+                for line in f:
+                    json_obj = json.loads(line)
+                    self.on_receive(json_obj)
         except Exception as e:
             print(Exception, ":", e)
             traceback.print_exc()
@@ -55,9 +53,6 @@ class AutoJsServer:
     def on_receive(self, data):
         if data['type'] == 'log':
             print("Log: {0}".format(data['log']))
-        if data['type'] == 'sid':
-            global sid
-            sid = data['sid']
 
     def send(self, obj):
         if self.conn is None:
