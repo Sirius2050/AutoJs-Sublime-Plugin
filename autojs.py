@@ -58,7 +58,7 @@ class AutoJsServer:
         if self.conn is None:
             sublime.error_message("Please connect the device before this action")
         else:
-            print("send", obj)
+            # print("send", obj)
             self.conn.sendall(bytes(json.dumps(obj), 'utf-8'))
 
     def disconnect(self):
