@@ -120,6 +120,17 @@ class StopAllCommand(sublime_plugin.TextCommand):
             'command': 'stopAll'
         })
 
+class SaveToPhoneCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        global server
+        content = self.view.substr(sublime.Region(0, self.view.size()))
+        server.send({
+            'type': 'command',
+            'view_id': self.view.id(),
+            'name': self.view.file_name(),
+            'script': content,
+            'command': 'save',
+        })
 
 class ConnectCommand(sublime_plugin.TextCommand):
     def run(self, edit):

@@ -20,3 +20,11 @@ Sublime菜单Preferences(首选项)->Browse Package(浏览插件)。这将会打
 然后就可以通过在Sublime Text打代码，在手机运行啦~
 
 可以借助DDMS来抓取布局信息。
+
+## Commands
+
+* Run 运行脚本
+* Rerun 停止当前文件对应的脚本并重新运行
+* Stop 停止当前文件对应的脚本
+* StopAll 停止所有正在运行的脚本
+* Save 保存当前文件到手机的脚本默认目录。（文件名会加上<remote>前缀)

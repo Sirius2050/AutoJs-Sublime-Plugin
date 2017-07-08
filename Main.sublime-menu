@@ -21,6 +21,10 @@
 		"command" : "stop_all"
 	},
 	{
+		"caption" : "Save",
+		"command" : "save_to_phone"
+	},
+	{
 		"caption" : "Start Server",
 		"command" : "connect"
 	},
