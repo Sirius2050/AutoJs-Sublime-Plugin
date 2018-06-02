@@ -1,3 +1,4 @@
+#coding:utf-8
 import types
 
 import sublime
@@ -17,6 +18,7 @@ port = 1209
 class AutoJsServer:
     def __init__(self, hostname, port):
         self.hostname = hostname
+        self.ip=None
         self.port = port
         self.conn = None
         self.server = None
@@ -28,12 +30,12 @@ class AutoJsServer:
             ip = s.getsockname()[0]  
         finally:  
             s.close()
-        print("Please connect ",ip," with Auto.Js.")
-        #return ip  
+        #print("请连接至"+ip)
+        return ip  
     def connect(self):
-        if(self.t is not None):
+        if self.t is not None:
             #sublime.status_message("Can't start server because server is running!")
-            print("Can't start server because server is running!")
+            print("服务正在运行中(请连接:"+self.get_host_ip()+")...")
             return
         try:
             self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -48,19 +50,22 @@ class AutoJsServer:
             traceback.print_exc()
 
     def listen(self):
-        print("waiting for accepting")
-        get_host_ip()
+        print("等待连接...")
+        print("请连接至:"+self.get_host_ip())
+        if self.server is None:
+            return
         self.conn, addr = self.server.accept()
-        print("accepted: {0}:{1}".format(addr[0], addr[1]))
+        print("已连接: {0}:{1}".format(addr[0], addr[1]))
         sublime.status_message("{0}:{1} connected".format(addr[0], addr[1]))
+        self.ip=addr[0]
         try:
             with closing(self.conn.makefile(encoding='utf-8')) as f:
                 for line in f:
                     json_obj = json.loads(line)
                     self.on_receive(json_obj)
         except Exception as e:
-            print(Exception, ":", e)
-            traceback.print_exc()
+           print(Exception, ":", e)
+           traceback.print_exc()
         finally:
             self.disconnect()
 
@@ -70,22 +75,26 @@ class AutoJsServer:
 
     def send(self, obj):
         if self.conn is None:
-            sublime.error_message("Please connect the device before this action")
+            sublime.error_message("请先连接到设备！")
         else:
-            # print("send", obj)
+            print("send", obj)
             self.conn.sendall(bytes(json.dumps(obj) + "\n", 'utf-8'))
 
     def disconnect(self):
+        if self.ip is None:
+                    #print("未连接因此无法断开")
+                    return
         if self.server is not None:
             try:
                 self.server.close()
-                print('disconnected')
+                print('断开连接')
             except Exception as e:
                 print(Exception, ":", e)
             finally:
+                self.ip=None
                 self.server = None
                 self.conn = None
-
+                self.t=None
     def __del__(self):
         self.disconnect()
 

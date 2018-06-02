@@ -5,31 +5,31 @@
 	"children":
 	[
 	{
-		"caption" : "Run",
+		"caption" : "运行(Run)",
 		"command" : "run"
 	},
 	{
-		"caption" : "Rerun",
+		"caption" : "再次运行(Rerun)",
 		"command" : "rerun"
 	},
 	{
-		"caption" : "Stop",
+		"caption" : "停止(Stop)",
 		"command" : "stop"
 	},
 	{
-		"caption" : "StopAll",
+		"caption" : "全部停止(StopAll)",
 		"command" : "stop_all"
 	},
 	{
-		"caption" : "Save",
+		"caption" : "保存到手机(save)",
 		"command" : "save_to_phone"
 	},
 	{
-		"caption" : "Start Server",
+		"caption" : "启动服务(Start Server)",
 		"command" : "connect"
 	},
 	{
-		"caption" : "Stop Server",
+		"caption" : "断开连接(Stop Server)",
 		"command" : "disconnect"
 	}
 	]
