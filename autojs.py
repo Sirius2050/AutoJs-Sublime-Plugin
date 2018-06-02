@@ -21,15 +21,25 @@ class AutoJsServer:
         self.conn = None
         self.server = None
         self.t=None
+    def get_host_ip(self):  
+        try:  
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  
+            s.connect(('8.8.8.8', 80))  
+            ip = s.getsockname()[0]  
+        finally:  
+            s.close()
+        print("Please connect ",ip," with Auto.Js.")
+        #return ip  
     def connect(self):
         if(self.t is not None):
-            sublime.status_message("Can't start server because server is running!")
+            #sublime.status_message("Can't start server because server is running!")
+            print("Can't start server because server is running!")
             return
         try:
             self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.server.bind((hostname, port))
             self.server.listen(1)
-            print("server listening at {0}:{1}".format(self.hostname, self.port))
+            #print("server listening at {0}:{1}".format(self.hostname, self.port))
             self.t = threading.Thread(target=self.listen)
             self.t.setDaemon(True)
             self.t.start()
@@ -39,6 +49,7 @@ class AutoJsServer:
 
     def listen(self):
         print("waiting for accepting")
+        get_host_ip()
         self.conn, addr = self.server.accept()
         print("accepted: {0}:{1}".format(addr[0], addr[1]))
         sublime.status_message("{0}:{1} connected".format(addr[0], addr[1]))
