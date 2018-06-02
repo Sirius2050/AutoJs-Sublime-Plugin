@@ -20,16 +20,19 @@ class AutoJsServer:
         self.port = port
         self.conn = None
         self.server = None
-
+        self.t=None
     def connect(self):
+        if(self.t is not None):
+            sublime.status_message("Can't start server because server is running!")
+            return
         try:
             self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.server.bind((hostname, port))
             self.server.listen(1)
             print("server listening at {0}:{1}".format(self.hostname, self.port))
-            t = threading.Thread(target=self.listen)
-            t.setDaemon(True)
-            t.start()
+            self.t = threading.Thread(target=self.listen)
+            self.t.setDaemon(True)
+            self.t.start()
         except Exception as e:
             print(Exception, ":", e)
             traceback.print_exc()
