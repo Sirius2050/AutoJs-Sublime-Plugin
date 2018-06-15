@@ -61,8 +61,29 @@ class AutoJsServer:
         try:
             with closing(self.conn.makefile(encoding='utf-8')) as f:
                 for line in f:
-                    json_obj = json.loads(line)
-                    self.on_receive(json_obj)
+                    try:
+                        # 修复了:读取到末尾时,可能会读取到一个空格.假如继续则报错:No JSON object could be decoded
+                        if len(line.strip()) == 0:
+                            continue
+                        # 修复了:[sublime test plugin 异常 · Issue #249 · hyb1996/Auto.js](https://github.com/hyb1996/Auto.js/issues/249) 
+                        # Extra data: line 1 column 57 - line 2 column 1 (char 56 - 139) 异常
+                        # 原因是一次性返回了多条JSON对象. {"type":"log","log":"X"}{"type":"log","log":"X"}{"type":"log","log":"X"}
+                        if line.find('}{') != -1:
+                            for item in line.split('}{'):
+                                if item.find('{') == -1:
+                                    item = '{' + item
+                                if item.find('}') == -1:
+                                    item = item + '}'
+                                json_obj = json.loads(item)
+                                self.on_receive(json_obj)
+                            continue
+                        
+                        json_obj = json.loads(line)
+                        self.on_receive(json_obj)
+                    except Exception as ex:
+                        print("Error line:",line)
+                        print(Exception, ":", ex)
+                        traceback.print_exc()
         except Exception as e:
            print(Exception, ":", e)
            traceback.print_exc()
